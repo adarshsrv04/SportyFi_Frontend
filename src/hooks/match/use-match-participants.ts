@@ -36,18 +36,6 @@ const useMatchParticipants = (match: Match | null, matchId: string | undefined) 
       let url = `http://localhost:8080/sportyfi/participants/${matchId}`;
       const response = await fetch(url);
       const participantsData: Participant[] = await response.json();
-      // console.log(participantsData);
-      // ------------------------------------
-
-      // const { data: participantsData, error: participantsError } = await supabase
-      //   .from('participants')
-      //   .select('*')
-      //   .eq('match_id', matchId);
-
-      // if (participantsError) {
-      //   console.error("Error fetching participants:", participantsError);
-      //   return;
-      // }
 
       console.log("Participants fetched:", participantsData);
 
@@ -59,11 +47,6 @@ const useMatchParticipants = (match: Match | null, matchId: string | undefined) 
             // const data1 = await fetchUserProfile(participant.user_id);
             const profileData = await fetchUserProfile(participant.user_id);
             // console.log(profileData);
-            // supabase
-            //   .from('profiles')
-            //   .select('username, avatar_url')
-            //   .eq('id', participant.user_id)
-            //   .maybeSingle();
 
             enhancedParticipants.push({
               ...participant,
@@ -104,19 +87,6 @@ const useMatchParticipants = (match: Match | null, matchId: string | undefined) 
 
     if (matchData.available_slots !== calculatedAvailableSlots) {
       console.log(`Updating available slots from ${matchData.available_slots} to ${calculatedAvailableSlots}`);
-
-      // try {
-      //   const { error: updateError } = await supabase
-      //     .from('matches')
-      //     .update({ available_slots: calculatedAvailableSlots })
-      //     .eq('id', matchData.id);
-
-      //   if (updateError) {
-      //     console.error("Error updating available slots:", updateError);
-      //   }
-      // } catch (err) {
-      //   console.error("Error in updateAvailableSlots:", err);
-      // }
     }
 
     return calculatedAvailableSlots;

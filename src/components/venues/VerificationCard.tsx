@@ -36,16 +36,6 @@ const VerificationCard: React.FC = () => {
     const fetchVerifications = async () => {
       setLoading(true);
 
-      // const { data, error } = await supabase
-      //   .from('venue_requests')
-      //   .select('*');
-      // //  console.log(data)
-      // if (error) {
-      //   console.error('Supabase fetch error:', error);
-      //   setLoading(false);
-      //   return;
-      // }
-
       try {
         const response = await fetch('http://localhost:8080/sportyfi/venues');
         const data = await response.json()
