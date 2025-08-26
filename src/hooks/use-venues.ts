@@ -4,7 +4,7 @@
 import { useVenuesQuery, type VenueFilters } from './venues/use-venues-query';
 import { useSingleVenueQuery } from './venues/use-single-venue-query';
 import { 
-  useVenueRequests, 
+  // useVenueRequests, 
   useSubmitVenueRequest,
   type VenueRequestFormData 
 } from './venues/use-venue-requests';
@@ -14,9 +14,9 @@ import { dummyVenues } from './venues/venue-mock-data';
 export { 
   useVenuesQuery,
   useSingleVenueQuery,
-  useVenueRequests,
+  // useVenueRequests,
   useSubmitVenueRequest,
-  dummyVenues,
+  // dummyVenues,
   type VenueFilters,
   type VenueRequestFormData
 };

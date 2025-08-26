@@ -30,6 +30,8 @@ import UserDashboard from "./pages/UserDashboard";
 import WatchMatches from "./pages/WatchMatches";
 import Onboarding from "./pages/Onboarding";
 import VerificationCard from "./components/venues/VerificationCard";
+import VenueDetails from "./components/venues/VenueRequestDetails";
+import VenueRequestDetails from "./components/venues/VenueRequestDetails";
 
 const queryClient = new QueryClient();
 
@@ -65,6 +67,7 @@ const App = () => (
               <Route path="/admin/edit-venue/:id" element={<AdminEditVenue />} />
               <Route path="/watch" element={<WatchMatches />} />
               <Route path="/verifyVenue" element={<VerificationCard />} />
+              <Route path="/verifyVenue/:id" element={<VenueRequestDetails />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </AuthProvider>

@@ -73,9 +73,72 @@ export const useProfileData = () => {
 
     const fetchProfileData = async () => {
       try {
+        // Fetch profile data
+        // const { data: profileData, error: profileError } = await supabase
+        //   .from('profiles')
+        //   .select('*')
+        //   .eq('id', user.id)
+        //   .single();
+
+        // if (profileError) throw profileError;
+        // setProfile(profileData);
+        // setLoading(prev => ({ ...prev, profile: false }));
+
+        // --------------My code -----------------
+        // const response = await fetch(`http://localhost:8080/sportyfi/profiles/${user.id}`);
+
+        // if (!response.ok) {
+        //   throw new Error(`Failed to fetch profile: ${response.statusText}`);
+        // }
+        // const profileData = await response.json();
+        // console.log(profileData)
         setProfile(await fetchUserProfile(user.id));
         setLoading(prev => ({ ...prev, profile: false }));
 
+        // ---------------------------------------------------------
+        // Fetch player stats
+        // const { data: statsData, error: statsError } = await supabase
+        //   .from('player_stats')
+        //   .select('*')
+        //   .eq('user_id', user.id)
+        //   .single();
+
+        // if (statsError && statsError.code !== 'PGRST116') throw statsError;
+        // setPlayerStats(statsData);
+        // setLoading(prev => ({ ...prev, stats: false }));
+
+        // Fetch achievements
+        // const { data: achievementsData, error: achievementsError } = await supabase
+        //   .from('player_achievements')
+        //   .select('*')
+        //   .eq('user_id', user.id)
+        //   .order('unlocked_at', { ascending: false });
+
+        // if (achievementsError) throw achievementsError;
+        // setAchievements(achievements Data || []);
+        // setLoading(prev => ({ ...prev, achievements: false }));
+
+        // Fetch upcoming matches
+        // const now = new Date().toISOString();
+        // const { data: participationsData, error: participationsError } = await supabase
+        //   .from('participants')
+        //   .select('match_id')
+        //   .eq('user_id', user.id);
+
+        // if (participationsError) throw participationsError;
+
+        // if (participationsData && participationsData.length > 0) {
+        //   const matchIds = participationsData.map(p => p.match_id);
+
+        // const { data: matchesData, error: matchesError } = await supabase
+        //   .from('matches')
+        //   .select('*')
+        //   .in('id', matchIds)
+        //   .gt('match_time', now)
+        //   .order('match_time', { ascending: true });
+
+        // if (matchesError) throw matchesError;
+        // }
         // --------------------------My code--------------------
         const matchesData = await fetchUserMatches(user.id);
 
@@ -113,6 +176,11 @@ export const useProfileData = () => {
     });
 
     try {
+      // const { data, error } = await supabase
+      //   .from('profiles')
+      //   .select('*')
+      //   .eq('id', user.id)
+      //   .single();
 
       // if (error) throw error;
       setProfile(await fetchUserProfile(user.id));

@@ -54,7 +54,7 @@ const RequestVenue = () => {
   // Preview image URLs (optional)
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   // Redirect if not logged in
-  console.log(user)
+  // console.log(user)
   // if (!user) {
   //   toast({
   //     title: 'Authentication required',
@@ -470,7 +470,7 @@ const RequestVenue = () => {
                       type="submit"
                       disabled={isPending}
                     >
-                      {isPending ? 'Submitting...' : 'Submit Venue Request1'}
+                      {isPending ? 'Submitting...' : 'Submit Venue Request'}
                     </Button>
                   </div>
                 </div>

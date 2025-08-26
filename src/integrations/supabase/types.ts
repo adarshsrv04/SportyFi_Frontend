@@ -485,6 +485,7 @@ export type Database = {
           owner_id: string | null
           price_per_hour: number
           updated_at: string
+          sports: string[]
         }
         Insert: {
           contact_email?: string | null

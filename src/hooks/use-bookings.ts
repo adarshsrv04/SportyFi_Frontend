@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import type { Booking, Venue } from '@/integrations/supabase/client';
+import { useAuth } from '@/context/AuthContext';
 
 export interface BookingFormData {
   venueId: string;
@@ -38,36 +39,40 @@ export const useBookings = () => {
 // Create a new booking
 export const useCreateBooking = () => {
   const queryClient = useQueryClient();
+  const user = useAuth();
 
   return useMutation({
     mutationFn: async (formData: BookingFormData) => {
-      const user = (await supabase.auth.getUser()).data.user;
-      
+
       if (!user) {
         throw new Error('You must be logged in to book a venue');
       }
-      
+
       // Fetch the venue to get price
-      const { data: venue, error: venueError } = await supabase
-        .from('venues')
-        .select('price_per_hour')
-        .eq('id', formData.venueId)
-        .single();
-        
-      if (venueError || !venue) {
+      // const { data: venue, error: venueError } = await supabase
+      //   .from('venues')
+      //   .select('price_per_hour')
+      //   .eq('id', formData.venueId)
+      //   .single();
+
+      const response = await fetch(`http://localhost:8080/sportyfi/venues/${formData.venueId}`);
+      const venue: Venue = await response.json();
+      // return response.json() || [];
+
+      if (!venue) {
         throw new Error('Failed to fetch venue details');
       }
-      
+
       // Calculate hours between start and end time
       const startHour = parseInt(formData.startTime.split(':')[0]);
       const startMinute = parseInt(formData.startTime.split(':')[1]);
       const endHour = parseInt(formData.endTime.split(':')[0]);
       const endMinute = parseInt(formData.endTime.split(':')[1]);
-      
+
       const startTimeMinutes = startHour * 60 + startMinute;
       const endTimeMinutes = endHour * 60 + endMinute;
       const durationHours = (endTimeMinutes - startTimeMinutes) / 60;
-      
+
       // Calculate total price
       const totalPrice = venue.price_per_hour * durationHours;
 

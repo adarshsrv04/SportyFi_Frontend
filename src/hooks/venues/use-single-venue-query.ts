@@ -2,6 +2,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import type { VenueWithRelations } from '@/integrations/supabase/client';
+import axios from 'axios';
 
 /**
  * Hook for fetching a single venue by ID with all related data
@@ -12,23 +13,27 @@ export const useSingleVenueQuery = (venueId: string | undefined) => {
     queryFn: async (): Promise<VenueWithRelations | null> => {
       if (!venueId) return null;
 
-      const { data, error } = await supabase
-        .from('venues')
-        .select(`
-          *,
-          sports:venue_sports(*),
-          amenities:venue_amenities(*),
-          images:venue_images(*)
-        `)
-        .eq('id', venueId)
-        .single();
+      const response =  await fetch(`http://localhost:8080/sportyfi/venues/${venueId}`);
 
-      if (error) {
-        console.error('Error fetching venue:', error);
-        throw new Error('Failed to fetch venue');
-      }
+      return response.json() || [];
 
-      return data;
+      // const { data, error } = await supabase
+      //   .from('venues')
+      //   .select(`
+      //     *,
+      //     sports:venue_sports(*),
+      //     amenities:venue_amenities(*),
+      //     images:venue_images(*)
+      //   `)
+      //   .eq('id', venueId)
+      //   .single();
+
+      // if (error) {
+      //   console.error('Error fetching venue:', error);
+      //   throw new Error('Failed to fetch venue');
+      // }
+
+      // return data;
     },
     enabled: !!venueId,
   });

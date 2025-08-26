@@ -83,6 +83,15 @@ const useFetchMatch = (matchId: string | undefined) => {
       if (matchDataNew.host_id) {
         console.log(matchDataNew.host_id)
         const hostData = await fetchUserProfile(matchDataNew.host_id);
+        // supabase
+        //   .from('profiles')
+        //   .select('username, avatar_url')
+        //   .eq('id', matchDataNew.host_id)
+        //   .maybeSingle();
+        // console.log(hostData)
+        // if (hostError && hostError.code !== 'PGRST116') {
+        //   console.error("Error fetching host:", hostError);
+        // } else 
         if (hostData) {
           setHost({
             id: matchDataNew.host_id,
@@ -100,6 +109,58 @@ const useFetchMatch = (matchId: string | undefined) => {
       console.error("Error fetching match by ID:", error);
       return null;
     }
+    // --------------------------------------------
+
+    // try {
+    //   const { data: matchData, error: matchError } = await supabase
+    //     .from('matches')
+    //     .select('*')
+    //     .eq('id', matchId)
+    //     .single();
+
+    //   if (matchError) {
+    //     console.error("Error fetching match:", matchError);
+    //     setError("Failed to load match details. Please try again.");
+    //     setIsLoading(false);
+    //     return null;
+    //   }
+
+    //   console.log("Fetched match data:", matchData);
+
+    //   if (matchData) {
+    //     // setMatch(matchData);
+
+    //   if (match.host_id) {
+    //     const { data: hostData, error: hostError } = await supabase
+    //       .from('profiles')
+    //       .select('username, avatar_url')
+    //       .eq('id', match.host_id)
+    //       .maybeSingle();
+
+    //     if (hostError && hostError.code !== 'PGRST116') {
+    //       console.error("Error fetching host:", hostError);
+    //     } else if (hostData) {
+    //       setHost({
+    //         id: match.host_id,
+    //         username: hostData.username || undefined,
+    //         avatar_url: hostData.avatar_url || undefined
+    //       });
+    //     } else {
+    //       setHost({
+    //         id: match.host_id
+    //       });
+    //     }
+    //   }
+    // }
+
+    //   return matchData;
+    // } catch (err) {
+    //   console.error("Unexpected error fetching match details:", err);
+    //   setError("An unexpected error occurred. Please try again.");
+    //   return null;
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
 
   useEffect(() => {

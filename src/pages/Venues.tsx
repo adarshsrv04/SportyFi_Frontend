@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { useVenues } from "@/hooks/use-venues";
 import type { VenueWithRelations } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
+import { dummyVenues } from "@/hooks/use-venues";
 
 const Venues = () => {
   const { user } = useAuth();

@@ -1,17 +1,17 @@
-import { useState } from 'react';
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
+import { useEffect, useState } from 'react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
 } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
-import { 
+import {
   Sheet,
   SheetContent,
   SheetDescription,
@@ -21,6 +21,7 @@ import {
   SheetFooter,
   SheetClose
 } from '@/components/ui/sheet';
+import { useAuth } from '@/context/AuthContext';
 
 const sportOptions = [
   'All Sports',
@@ -60,15 +61,36 @@ interface VenueFilterProps {
 }
 
 const VenueFilter = ({ onFilterChange }: VenueFilterProps) => {
+  const { user } = useAuth();
+  const [location, setLocation] = useState('Mumbai');
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      // console.log(user)
+      if (user) {
+        const response = await fetch(`http://localhost:8080/sportyfi/profiles/${user.id}`);
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch profile: ${response.statusText}`);
+        }
+        const profileData = await response.json();
+        if (profileData !== null && profileData.location !== null) {
+          // console.log(profileData.location);
+          setLocation(profileData.location);
+        }
+      }
+    }
+    fetchUserDetails();
+  }, [user]);
+
   const [filters, setFilters] = useState<VenueFilterValues>({
     searchQuery: '',
     sport: 'All Sports',
     location: 'All Locations',
     priceRange: [0, 5000],
   });
-  
+
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
-  
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newFilters = {
       ...filters,
@@ -77,7 +99,7 @@ const VenueFilter = ({ onFilterChange }: VenueFilterProps) => {
     setFilters(newFilters);
     onFilterChange(newFilters);
   };
-  
+
   const handleSportChange = (value: string) => {
     const newFilters = {
       ...filters,
@@ -86,7 +108,7 @@ const VenueFilter = ({ onFilterChange }: VenueFilterProps) => {
     setFilters(newFilters);
     onFilterChange(newFilters);
   };
-  
+
   const handleLocationChange = (value: string) => {
     const newFilters = {
       ...filters,
@@ -95,14 +117,14 @@ const VenueFilter = ({ onFilterChange }: VenueFilterProps) => {
     setFilters(newFilters);
     onFilterChange(newFilters);
   };
-  
+
   const handlePriceChange = (value: number[]) => {
     // Ensure we always have exactly two values for the tuple type
     const priceRange: [number, number] = [
       value[0] ?? 0,
       value[1] ?? 5000
     ];
-    
+
     const newFilters = {
       ...filters,
       priceRange
@@ -110,7 +132,7 @@ const VenueFilter = ({ onFilterChange }: VenueFilterProps) => {
     setFilters(newFilters);
     onFilterChange(newFilters);
   };
-  
+
   const handleReset = () => {
     const defaultFilters: VenueFilterValues = {
       searchQuery: '',
@@ -121,7 +143,7 @@ const VenueFilter = ({ onFilterChange }: VenueFilterProps) => {
     setFilters(defaultFilters);
     onFilterChange(defaultFilters);
   };
-  
+
   return (
     <div className="w-full">
       {/* Desktop Filters */}
@@ -139,7 +161,7 @@ const VenueFilter = ({ onFilterChange }: VenueFilterProps) => {
               onChange={handleInputChange}
             />
           </div>
-          
+
           <div className="col-span-2">
             <Select value={filters.sport} onValueChange={handleSportChange}>
               <SelectTrigger>
@@ -152,7 +174,7 @@ const VenueFilter = ({ onFilterChange }: VenueFilterProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div className="col-span-2">
             <Select value={filters.location} onValueChange={handleLocationChange}>
               <SelectTrigger>
@@ -165,7 +187,7 @@ const VenueFilter = ({ onFilterChange }: VenueFilterProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div className="col-span-3">
             <div className="flex items-center">
               <Label className="mr-2 whitespace-nowrap">Price:</Label>
@@ -183,10 +205,10 @@ const VenueFilter = ({ onFilterChange }: VenueFilterProps) => {
               </div>
             </div>
           </div>
-          
+
           <div className="col-span-1">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={handleReset}
               className="w-full"
             >
@@ -196,7 +218,7 @@ const VenueFilter = ({ onFilterChange }: VenueFilterProps) => {
           </div>
         </div>
       </div>
-      
+
       {/* Mobile Filters */}
       <div className="block md:hidden">
         <div className="flex gap-2">
@@ -212,7 +234,7 @@ const VenueFilter = ({ onFilterChange }: VenueFilterProps) => {
               onChange={handleInputChange}
             />
           </div>
-          
+
           <Sheet open={isMobileFilterOpen} onOpenChange={setIsMobileFilterOpen}>
             <SheetTrigger asChild>
               <Button variant="outline">
@@ -227,7 +249,7 @@ const VenueFilter = ({ onFilterChange }: VenueFilterProps) => {
                   Adjust filters to find the perfect venue
                 </SheetDescription>
               </SheetHeader>
-              
+
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
                   <Label>Sport</Label>
@@ -242,7 +264,7 @@ const VenueFilter = ({ onFilterChange }: VenueFilterProps) => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label>Location</Label>
                   <Select value={filters.location} onValueChange={handleLocationChange}>
@@ -256,7 +278,7 @@ const VenueFilter = ({ onFilterChange }: VenueFilterProps) => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label>Price Range</Label>
                   <div className="px-2">
@@ -275,7 +297,7 @@ const VenueFilter = ({ onFilterChange }: VenueFilterProps) => {
                   </div>
                 </div>
               </div>
-              
+
               <SheetFooter>
                 <SheetClose asChild>
                   <Button onClick={handleReset} variant="outline" className="w-full mt-2">

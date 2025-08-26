@@ -22,7 +22,6 @@ interface GroundVerification {
   location: string;
   priceperhour: string;
   match_time: string;
-  team_size: number;
   status: string;
   contactemail: string;
 }
@@ -36,8 +35,18 @@ const VerificationCard: React.FC = () => {
     const fetchVerifications = async () => {
       setLoading(true);
 
+      // const { data, error } = await supabase
+      //   .from('venue_requests')
+      //   .select('*');
+      // //  console.log(data)
+      // if (error) {
+      //   console.error('Supabase fetch error:', error);
+      //   setLoading(false);
+      //   return;
+      // }
+
       try {
-        const response = await fetch('http://localhost:8080/sportyfi/venues');
+        const response = await fetch('http://localhost:8080/sportyfi/venues/requested-venues');
         const data = await response.json()
         console.log(data)
 
@@ -103,7 +112,7 @@ const VerificationCard: React.FC = () => {
                       </p>
                       <p className="text-gray-700 flex items-center">
                         <Users className="h-4 w-4 mr-1 text-gray-500" />
-                        {venue.team_size} players | ₹{venue.priceperhour}/hour
+                        ₹{venue.priceperhour}/hour
                       </p>
                       <p className="text-gray-700 flex items-center">
                         <Mail className="h-4 w-4 mr-1 text-gray-500" />
@@ -111,7 +120,7 @@ const VerificationCard: React.FC = () => {
                       </p>
                     </div>
                     <Button
-                      onClick={() => navigate(`/verification/${venue.id}`)}
+                      onClick={() => navigate(`/verifyVenue/${venue.id}`)}
                       className="w-full bg-sportyfi-orange hover:bg-red-600 text-white"
                     >
                       View Details

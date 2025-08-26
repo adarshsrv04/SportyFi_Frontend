@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { ParticipantWithProfile } from './use-match-participants';
 // import useFetchMatch from './use-fetch-match';
 
+
 // =============================my code====================================
 export type CreateParticipant = {
   match_id: string;
@@ -121,6 +122,28 @@ const useMatchActions = (
           });
           return;
         }
+
+        // const { data: latestMatch, error: latestMatchError } = await supabase
+        //   .from('matches')
+        //   .select('*')
+        //   .eq('id', match.id)
+        //   .single();
+
+        // if (latestMatchError) {
+        //   throw new Error("Could not fetch latest match data");
+        // }
+        // try {
+        //   console.log(match.id);
+        //   let url = `http://localhost:8080/sportyfi/match/${match.id}`;
+        //   const response = await fetch(url);
+        //   if (!response.ok) {
+        //     throw new Error(`Failed to fetch match: ${response.statusText}`);
+        //   }
+
+        // } catch (error) {
+        //   console.error("Error fetching match by ID:", error);
+        // }
+        // const latestMatch: Match = await;
         const latestMatch: Match | null = await fetchMatch(match.id);
         console.log('---------', latestMatch);
         if (latestMatch) {
@@ -146,13 +169,38 @@ const useMatchActions = (
           console.log("Something went wrong while creating the match");
         }
 
+        // const { data, error } = await supabase
+        //   .from('participants')
+        //   .insert([
+        //     { match_id: match.id, user_id: user.id }
+        //   ])
+        //   .select();
+
+        // if (error) {
+        //   console.error("Error joining match:", error);
+        //   throw error;
+        // }
+
+        // console.log("Successfully joined match:", data);
+
         console.log('-----latestmatch', latestMatch);
         const newAvailableSlots = Math.max(0, latestMatch.available_slots - 1);
+
+        // const { error: updateError } = await supabase
+        //   .from('matches')
+        //   .update({ available_slots: newAvailableSlots })
+        //   .eq('id', match.id);
 
         const updateMatchSlot = await updateMatch(match.id, 'available_slots', newAvailableSlots);
 
         if (!updateMatchSlot) {
           console.error("updating match slots:", updateMatchSlot);
+
+          // await supabase
+          //   .from('participants')
+          //   .delete()
+          //   .eq('match_id', match.id)
+          //   .eq('user_id', user.id);
 
           throw new Error("Could not update available slots");
         }
@@ -196,6 +244,18 @@ const useMatchActions = (
         }
 
         const matchId = match.id;
+        // const { match: latestMatch, host, isLoading, error: latestMatchError, fetchMatchData } = useFetchMatch(matchId);
+
+        // const { data: latestMatch, error: latestMatchError } = await supabase
+        //   .from('matches')
+        //   .select('*')
+        //   .eq('id', match.id)
+        //   .single();
+
+        // if (latestMatchError) {
+        //   throw new Error("Could not fetch latest match data");
+        // }
+
         console.log("Starting leave transaction");
 
         // ===========================my code=============================
@@ -215,9 +275,24 @@ const useMatchActions = (
         } catch (error) {
           console.error("Error deleting participant:", error);
         }
+        // -----------------------------------------------------
+
+        // const { error: deleteError } = await supabase
+        //   .from('participants')
+        //   .delete()
+        //   .eq('id', userParticipant.id);
+
+        // if (deleteError) {
+        //   console.error("Error leaving match:", deleteError);
+        //   throw deleteError;
+        // }
         const latestMatch: Match | null = await fetchMatch(match.id);
         const newAvailableSlots = Math.min(latestMatch.available_slots + 1, match.team_size);
         const updateMatchSlot = await updateMatch(match.id, 'available_slots', newAvailableSlots);
+        // const { error: updateError } = await supabase
+        //   .from('matches')
+        //   .update({ available_slots: newAvailableSlots })
+        //   .eq('id', match.id);
 
         if (!updateMatchSlot) {
           console.error("Error updating match slots:", updateMatchSlot);
@@ -280,3 +355,14 @@ const fetchMatch = async (matchId) => {
     return null;
   }
 };
+
+// Separate useEffect to act on latestMatch change
+// useEffect(() => {
+//   if (latestMatch && latestMatch.available_slots <= 0) {
+//     toast({
+//       title: "Match is full",
+//       description: "Sorry, this match is already full.",
+//       variant: "destructive",
+//     });
+//   }
+// }, [latestMatch]); // run when latestMatch is updated

@@ -38,8 +38,8 @@ const VenueCard = ({ venue }: VenueCardProps) => {
         
         <div className="flex flex-wrap gap-1 mt-3">
           {venue.sports?.slice(0, 3).map((sport) => (
-            <Badge key={sport.id} variant="outline" className="bg-gray-100">
-              {sport.sport}
+            <Badge key={sport} variant="outline" className="bg-gray-100">
+              {sport}
             </Badge>
           ))}
           {venue.sports && venue.sports.length > 3 && (
