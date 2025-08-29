@@ -45,6 +45,9 @@ export interface VenueRequestFormData {
 /**
  * Hook for submitting new venue requests
  */
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const useSubmitVenueRequest = () => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
@@ -183,7 +186,7 @@ export const saveVenueRequest = async (venueData: any, images: File[]) => {
     });
     console.log(formData)
     const response = await fetch(
-      "http://localhost:8080/sportyfi/venues/venue-request",
+      `${API_BASE_URL}/sportyfi/venues/venue-request`,
       {
         method: "POST",
         headers: {

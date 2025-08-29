@@ -4,6 +4,8 @@ import { supabase } from '@/integrations/supabase/client';
 import type { VenueWithRelations } from '@/integrations/supabase/client';
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 /**
  * Hook for fetching a single venue by ID with all related data
  */
@@ -13,7 +15,7 @@ export const useSingleVenueQuery = (venueId: string | undefined) => {
     queryFn: async (): Promise<VenueWithRelations | null> => {
       if (!venueId) return null;
 
-      const response =  await fetch(`http://localhost:8080/sportyfi/venues/${venueId}`);
+      const response =  await fetch(`${API_BASE_URL}/sportyfi/venues/${venueId}`);
 
       return response.json() || [];
 

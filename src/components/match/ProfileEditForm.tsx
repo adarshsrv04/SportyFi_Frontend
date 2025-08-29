@@ -32,6 +32,8 @@ const AVAILABLE_SPORTS = [
   'Soccer', 'Golf', 'Hockey', 'Rugby', 'Boxing'
 ];
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const ProfileEditForm = ({ user, onSave }: ProfileEditFormProps) => {
   // Add debugging for mount/unmount and prop changes
   useEffect(() => {
@@ -91,7 +93,7 @@ const ProfileEditForm = ({ user, onSave }: ProfileEditFormProps) => {
       //   throw error;
       // }
 
-      const response = await fetch(`http://localhost:8080/sportyfi/profiles/update/${user.id}`, {
+      const response = await fetch(`${API_BASE_URL}/sportyfi/profiles/update/${user.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -544,7 +544,7 @@ const VenueDetail = () => {
                     <div className="flex flex-wrap gap-2 mb-6">
                       {venue.sports && venue.sports.length > 0 ? (
                         venue.sports.map((sport) => (
-                          <Badge key={sport.id} variant="outline">
+                          <Badge key={sport} variant="outline">
                             {sport}
                           </Badge>
                         ))

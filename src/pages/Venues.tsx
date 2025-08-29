@@ -9,7 +9,6 @@ import { Link } from "react-router-dom";
 import { useVenues } from "@/hooks/use-venues";
 import type { VenueWithRelations } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
-import { dummyVenues } from "@/hooks/use-venues";
 
 const Venues = () => {
   const { user } = useAuth();
@@ -34,7 +33,7 @@ const Venues = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <SportyFiHeader />
-      
+
       <main className="flex-grow">
         <div className="sportyfi-container py-8">
           <div className="flex items-center justify-between mb-6">
@@ -42,15 +41,19 @@ const Venues = () => {
               <MapPin className="mr-2 text-sportyfi-orange" size={28} />
               Sports Venues
             </h1>
-            { (user && user.userType === 'USER') && <Link to="/venues/request">
+            {(user && user.userType === 'USER') && <Link to="/venues/request">
               <Button className="bg-sportyfi-orange hover:bg-red-600 text-white">
                 Request New Venue
               </Button>
-            </Link> }
+            </Link>}
           </div>
-          
+
           <VenueFilter onFilterChange={handleFilterChange} />
-          
+          <Link to="/bookings">
+            <Button className="bg-sportyfi-orange hover:bg-red-600 text-white float-right top-10px">
+              My Bookings
+            </Button>
+          </Link>
           {isLoading ? (
             <div className="py-12 text-center">
               <div className="animate-spin h-8 w-8 border-4 border-sportyfi-orange border-t-transparent rounded-full mx-auto mb-4"></div>
@@ -75,7 +78,7 @@ const Venues = () => {
           ) : null}
         </div>
       </main>
-      
+
       <NavigationButtons />
     </div>
   );

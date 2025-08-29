@@ -8,6 +8,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/context/AuthContext';
 import { ProfileData } from '@/hooks/use-profile-data';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const MatchesSection = () => {
   const { user } = useAuth();
   const [location, setLocation] = useState('Mumbai');
@@ -25,7 +27,7 @@ const MatchesSection = () => {
     
         // if (profileError) throw profileError;
         // console.log(profileData)
-        const response = await fetch(`http://localhost:8080/sportyfi/profiles/${user.id}`);
+        const response = await fetch(`${API_BASE_URL}/sportyfi/profiles/${user.id}`);
         
         if (!response.ok) {
           throw new Error(`Failed to fetch profile: ${response.statusText}`);

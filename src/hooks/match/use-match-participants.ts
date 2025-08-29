@@ -19,6 +19,8 @@ export type ParticipantWithProfile = Participant & {
   };
 };
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const useMatchParticipants = (match: Match | null, matchId: string | undefined) => {
   const { user } = useAuth();
   const [participants, setParticipants] = useState<ParticipantWithProfile[]>([]);
@@ -33,7 +35,7 @@ const useMatchParticipants = (match: Match | null, matchId: string | undefined) 
 
     try {
       // ======================my code =====================
-      let url = `http://localhost:8080/sportyfi/participants/${matchId}`;
+      let url = `${API_BASE_URL}/sportyfi/participants/${matchId}`;
       const response = await fetch(url);
       const participantsData: Participant[] = await response.json();
       // console.log(participantsData);
@@ -148,7 +150,7 @@ const useMatchParticipants = (match: Match | null, matchId: string | undefined) 
 };
 
 export async function fetchUserProfile(userId: string) {
-  const response = await fetch(`http://localhost:8080/sportyfi/profiles/${userId}`);
+  const response = await fetch(`${API_BASE_URL}/sportyfi/profiles/${userId}`);
   if (!response.ok) {
     throw new Error(`Failed to fetch profile: ${response.statusText}`);
   }

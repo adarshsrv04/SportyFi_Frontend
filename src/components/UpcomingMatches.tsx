@@ -10,8 +10,9 @@ interface UpcomingMatchesProps {
   location: string;
 }
 
-const UpcomingMatches = ({ location }: UpcomingMatchesProps) => {
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+const UpcomingMatches = ({ location }: UpcomingMatchesProps) => {
   const [matches, setMatches] = useState<Match[]>([]);
   // console.log(location)
   // Mock data for upcoming matches
@@ -183,7 +184,7 @@ const fetchMatchByCity = async (city: string) => {
   if (!city) return;
 
   try {
-    let url = 'http://localhost:8080/sportyfi/matches/city';
+    let url = `${API_BASE_URL}/sportyfi/matches/city`;
     if (city) {
       url += `?city=${city}`;
     }
@@ -211,7 +212,7 @@ const fetchHostProfile = async (host_id: string) => {
     //   .eq('id', host_id)
     //   .maybeSingle();
 
-    const response = await fetch(`http://localhost:8080/sportyfi/profiles/${host_id}`);
+    const response = await fetch(`${API_BASE_URL}/sportyfi/profiles/${host_id}`);
 
     if (!response.ok) {
       throw new Error(`Failed to fetch profile: ${response.statusText}`);

@@ -26,6 +26,8 @@ export type FindMatch = {
   hostId: string;
 };
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const useFetchMatch = (matchId: string | undefined) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -56,7 +58,7 @@ const useFetchMatch = (matchId: string | undefined) => {
 
     // ====================my code ==================
     try {
-      let url = `http://localhost:8080/sportyfi/match/${matchId}`;
+      let url = `${API_BASE_URL}/sportyfi/match/${matchId}`;
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`Failed to fetch match: ${response.statusText}`);

@@ -414,6 +414,7 @@ type AuthContextType = {
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -503,7 +504,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         console.log(refreshToken)
         // try to refresh access token
         try {
-          const res = await axios.post('http://localhost:8080/sportyfi/auth/refresh', {
+          const res = await axios.post(`${API_BASE_URL}/sportyfi/auth/refresh`, {
             refreshToken
           });
     
@@ -512,7 +513,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           localStorage.setItem('accessToken', newToken);
     
           // Retry fetching user
-          const userRes = await axios.get<User>('http://localhost:8080/sportyfi/auth/me', {
+          const userRes = await axios.get<User>(`${API_BASE_URL}/sportyfi/auth/me`, {
             headers: {
               Authorization: `Bearer ${newToken}`,
             },
@@ -534,7 +535,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     
       // normal flow
       try {
-        const response = await axios.get<User>('http://localhost:8080/sportyfi/auth/me', {
+        const response = await axios.get<User>(`${API_BASE_URL}/sportyfi/auth/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -564,7 +565,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       //   password,
       // });
 
-      const res = await axios.post("http://localhost:8080/sportyfi/auth/signup", formData);
+      const res = await axios.post(`${API_BASE_URL}/sportyfi/auth/signup`, formData);
 
       toast({
         title: 'Account created',
@@ -586,7 +587,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const signIn = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      const response = await axios.post('http://localhost:8080/sportyfi/auth/signin', {
+      const response = await axios.post(`${API_BASE_URL}/sportyfi/auth/signin`, {
         email,
         password,
       });
@@ -685,7 +686,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      const res = await axios.post("http://localhost:8080/auth/google", {
+      const res = await axios.post(`${API_BASE_URL}/auth/google`, {
         idToken: tokenResponse.access_token,
       });
 
@@ -719,7 +720,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         isLoading,
         signUp,
         signIn,
-        signInWithGoogle: login, 
+        login,
+        // signInWithGoogle: login, 
         // signInWithApple, signInWithPhone, verifyOtp
         signOut,
       }}

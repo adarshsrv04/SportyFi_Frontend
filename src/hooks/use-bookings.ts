@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import type { Booking, Venue } from '@/integrations/supabase/client';
 import { useAuth } from '@/context/AuthContext';
+import axios from 'axios';
 
 export interface BookingFormData {
   venueId: string;
@@ -13,26 +14,44 @@ export interface BookingFormData {
   notes?: string;
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 // Get all bookings for the current user
+// export const useBookings = () => {
+//   return useQuery({
+//     queryKey: ['bookings'],
+//     queryFn: async (): Promise<(Booking & { venue: Venue | null })[]> => {
+//       const { data, error } = await supabase
+//         .from('bookings')
+//         .select(`
+//           *,
+//           venue:venues(*)
+//         `)
+//         .order('booking_date', { ascending: true });
+
+//       if (error) {
+//         console.error('Error fetching bookings:', error);
+//         throw new Error('Failed to fetch bookings');
+//       }
+
+//       return data || [];
+//     },
+//   });
+// };
+
 export const useBookings = () => {
+  // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  console.log("API base:", import.meta.env.VITE_API_BASE_URL);
+
+  const { user } = useAuth();
+
   return useQuery({
-    queryKey: ['bookings'],
+    queryKey: ["bookings", user?.id],
     queryFn: async (): Promise<(Booking & { venue: Venue | null })[]> => {
-      const { data, error } = await supabase
-        .from('bookings')
-        .select(`
-          *,
-          venue:venues(*)
-        `)
-        .order('booking_date', { ascending: true });
-
-      if (error) {
-        console.error('Error fetching bookings:', error);
-        throw new Error('Failed to fetch bookings');
-      }
-
-      return data || [];
+      const response = await fetch(`${API_BASE_URL}/sportyfi/bookings/${user.id}`);
+      return response.json();
     },
+    enabled: !!user, // ✅ only run query when user is not null
   });
 };
 
@@ -55,9 +74,9 @@ export const useCreateBooking = () => {
       //   .eq('id', formData.venueId)
       //   .single();
 
-      const response = await fetch(`http://localhost:8080/sportyfi/venues/${formData.venueId}`);
+      // Fetch the venue to get price
+      const response = await fetch(`${API_BASE_URL}/sportyfi/venues/${formData.venueId}`);
       const venue: Venue = await response.json();
-      // return response.json() || [];
 
       if (!venue) {
         throw new Error('Failed to fetch venue details');
@@ -76,26 +95,28 @@ export const useCreateBooking = () => {
       // Calculate total price
       const totalPrice = venue.price_per_hour * durationHours;
 
-      const { data, error } = await supabase
-        .from('bookings')
-        .insert({
-          venue_id: formData.venueId,
-          user_id: user.id,
-          booking_date: formData.bookingDate.toISOString().split('T')[0],
-          start_time: formData.startTime + ':00',
-          end_time: formData.endTime + ':00',
-          status: 'pending',
-          total_price: totalPrice,
-          notes: formData.notes || null
-        })
-        .select()
-        .single();
+      // const { data, error } = await supabase
+      //   .from('bookings')
+      //   .insert({
+      //     venue_id: formData.venueId,
+      //     user_id: user.id,
+      //     booking_date: formData.bookingDate.toISOString().split('T')[0],
+      //     start_time: formData.startTime + ':00',
+      //     end_time: formData.endTime + ':00',
+      //     status: 'pending',
+      //     total_price: totalPrice,
+      //     notes: formData.notes || null
+      //   })
+      //   .select()
+      //   .single();
 
-      if (error) {
-        console.error('Error creating booking:', error);
-        throw new Error('Failed to create booking');
-      }
-
+      // if (error) {
+      //   console.error('Error creating booking:', error);
+      //   throw new Error('Failed to create booking');
+      // }
+      console.log(user.user.id);
+      const data = createBooking(formData, user, totalPrice);
+      console.log(data);
       return data;
     },
     onSuccess: () => {
@@ -151,3 +172,30 @@ export const useCancelBooking = () => {
     }
   });
 };
+
+const createBooking = async (formData: any, user: any, totalPrice: number) => {
+  try {
+    const bookingPayload = {
+      venue_id: formData.venueId,
+      user_id: user.user.id,
+      booking_date: formData.bookingDate.toISOString().split("T")[0],
+      start_time: formData.startTime + ":00",
+      end_time: formData.endTime + ":00",
+      status: "pending",
+      total_price: totalPrice,
+      notes: formData.notes || null,
+    };
+    console.log((bookingPayload))
+    const response = await axios.post(
+      "/sportyfi/venues/createBooking",
+      bookingPayload
+    );
+
+    console.log("Booking created:", response.data);
+    return response.data;
+  } catch (error: any) {
+    console.error("Error creating booking:", error);
+    throw error;
+  }
+};
+

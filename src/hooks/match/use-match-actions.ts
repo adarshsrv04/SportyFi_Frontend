@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { ParticipantWithProfile } from './use-match-participants';
 // import useFetchMatch from './use-fetch-match';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // =============================my code====================================
 export type CreateParticipant = {
@@ -15,7 +16,7 @@ export type CreateParticipant = {
 };
 export const addParticipant = async (participant: CreateParticipant): Promise<void> => {
   try {
-    const response = await fetch('http://localhost:8080/sportyfi/addParticipant', {
+    const response = await fetch(`${API_BASE_URL}/sportyfi/addParticipant`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -42,7 +43,7 @@ export const addParticipant = async (participant: CreateParticipant): Promise<vo
 
 export const updateMatch = async (matchId: string, field: string, newValue: any): Promise<boolean> => {
   try {
-    const response = await fetch(`http://localhost:8080/sportyfi/match/update/${matchId}/${field}`, {
+    const response = await fetch(`${API_BASE_URL}/sportyfi/match/update/${matchId}/${field}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newValue)
@@ -260,7 +261,7 @@ const useMatchActions = (
 
         // ===========================my code=============================
         try {
-          const response = await fetch(`http://localhost:8080/sportyfi/deleteParticipant/${userParticipant.id}`, {
+          const response = await fetch(`${API_BASE_URL}/sportyfi/deleteParticipant/${userParticipant.id}`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
@@ -341,7 +342,7 @@ import { useEffect } from "react";
 
 const fetchMatch = async (matchId) => {
   try {
-    let url = `http://localhost:8080/sportyfi/match/${matchId}`;
+    let url = `${API_BASE_URL}/sportyfi/match/${matchId}`;
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`Failed to fetch match: ${response.statusText}`);

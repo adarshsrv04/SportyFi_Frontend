@@ -31,6 +31,8 @@ export const initialFormData: MatchFormData = {
   skillLevel: 'all',
 };
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const useCreateMatchForm = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -195,7 +197,7 @@ function setError(arg0: string) {
 // export type CreateMatchType = Omit<Match, 'id' | 'created_at'>;
 export const createMatch = async (match: any): Promise<void> => {
   try {
-    const response = await fetch('http://localhost:8080/sportyfi/createMatch', {
+    const response = await fetch(`${API_BASE_URL}/sportyfi/createMatch`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

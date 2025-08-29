@@ -26,6 +26,8 @@ interface GroundVerification {
   contactemail: string;
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const VerificationCard: React.FC = () => {
   const navigate = useNavigate();
   const [verifications, setVerifications] = useState<GroundVerification[]>([]);
@@ -46,7 +48,7 @@ const VerificationCard: React.FC = () => {
       // }
 
       try {
-        const response = await fetch('http://localhost:8080/sportyfi/venues/requested-venues');
+        const response = await fetch('${API_BASE_URL}/sportyfi/venues/requested-venues');
         const data = await response.json()
         console.log(data)
 

@@ -15,6 +15,8 @@ export type FindMatch = {
   hostId: string;
 };
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 /**
  * Hook to fetch matches data from Supabase with optimized performance
  */
@@ -49,7 +51,7 @@ const useFetchMatches = (selectedSport: string | null) => {
 
     try {
       // ======================my code===================
-      let url = 'http://localhost:8080/sportyfi/matches';
+      let url = `${API_BASE_URL}/sportyfi/matches`;
       if (selectedSport) {
         url += `?sport=${encodeURIComponent(selectedSport)}`;
       }

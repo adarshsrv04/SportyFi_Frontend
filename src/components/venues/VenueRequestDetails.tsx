@@ -22,6 +22,8 @@ interface VenueDetailsData {
     created_at: string;
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const VenueRequestDetails: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [venue, setVenue] = useState<VenueDetailsData | null>(null);
@@ -32,7 +34,7 @@ const VenueRequestDetails: React.FC = () => {
         const fetchVenue = async () => {
             setLoading(true);
             try {
-                const response = await fetch(`http://localhost:8080/sportyfi/venues/verification/${id}`);
+                const response = await fetch(`${API_BASE_URL}/sportyfi/venues/verification/${id}`);
                 const data = await response.json()
                 console.log(data);
                 // const { data, error } = await supabase
@@ -78,7 +80,7 @@ const VenueRequestDetails: React.FC = () => {
 
     const approveVenue = async () => {
         try {
-            const response = await axios.post(`/sportyfi/venues/approve/${id}`);
+            const response = await axios.post(`${API_BASE_URL}/sportyfi/venues/approve/${id}`);
             alert("Venue approved successfully!");
             console.log("Approved Venue:", response.data);
         } catch (error) {

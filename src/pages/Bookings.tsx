@@ -16,14 +16,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import SportyFiHeader from '@/components/SportyFiHeader';
 import Footer from '@/components/Footer';
-import { 
-  ChevronLeft, 
-  Calendar, 
-  Clock, 
-  MapPin, 
-  IndianRupee, 
+import {
+  ChevronLeft,
+  Calendar,
+  Clock,
+  MapPin,
+  IndianRupee,
   AlertCircle,
-  Loader2 
+  Loader2
 } from 'lucide-react';
 import {
   AlertDialog,
@@ -37,22 +37,23 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { useAuth } from '@/context/AuthContext';
 import { format } from 'date-fns';
+import { useAuth } from '@/context/AuthContext';
 
 const Bookings = () => {
   const { user } = useAuth();
+  // console.log(user)
   const { data: bookings = [], isLoading, error } = useBookings();
   const { mutate: cancelBooking, isPending: isCancelling } = useCancelBooking();
-  
+
   const [bookingToCancel, setBookingToCancel] = useState<string | null>(null);
-  
+
   // Filter bookings by status
   const pendingBookings = bookings.filter(booking => booking.status === 'pending');
   const confirmedBookings = bookings.filter(booking => booking.status === 'confirmed');
   const cancelledBookings = bookings.filter(booking => booking.status === 'cancelled');
   const completedBookings = bookings.filter(booking => booking.status === 'completed');
-  
+
   // Format date for display
   const formatDate = (dateStr: string) => {
     try {
@@ -61,7 +62,7 @@ const Bookings = () => {
       return dateStr;
     }
   };
-  
+
   // Format time for display (from "HH:MM:SS" to "HH:MM AM/PM")
   const formatTime = (timeStr: string) => {
     try {
@@ -74,7 +75,7 @@ const Bookings = () => {
       return timeStr;
     }
   };
-  
+
   // Get status badge
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -90,7 +91,7 @@ const Bookings = () => {
         return <Badge>{status}</Badge>;
     }
   };
-  
+
   // Handle booking cancellation
   const handleCancelBooking = () => {
     if (bookingToCancel) {
@@ -98,13 +99,13 @@ const Bookings = () => {
       setBookingToCancel(null);
     }
   };
-  
+
   // If not logged in
   if (!user) {
     return (
       <div className="min-h-screen flex flex-col">
         <SportyFiHeader />
-        
+
         <main className="flex-grow flex items-center justify-center">
           <div className="max-w-md w-full mx-auto p-6">
             <Alert>
@@ -114,7 +115,7 @@ const Bookings = () => {
                 You need to be signed in to view your bookings.
               </AlertDescription>
             </Alert>
-            
+
             <div className="mt-6 flex justify-center">
               <Link to="/auth">
                 <Button>Sign In</Button>
@@ -122,16 +123,16 @@ const Bookings = () => {
             </div>
           </div>
         </main>
-        
+
         <Footer />
       </div>
     );
   }
-  
+
   return (
     <div className="min-h-screen flex flex-col">
       <SportyFiHeader />
-      
+
       <main className="flex-grow py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-6">
@@ -140,7 +141,7 @@ const Bookings = () => {
               Back to Venues
             </Link>
           </div>
-          
+
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
             <div>
               <h1 className="text-3xl font-bold">My Bookings</h1>
@@ -149,13 +150,13 @@ const Bookings = () => {
               </p>
             </div>
           </div>
-          
+
           {isLoading && (
             <div className="flex justify-center items-center py-12">
               <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
             </div>
           )}
-          
+
           {error && (
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
@@ -165,7 +166,7 @@ const Bookings = () => {
               </AlertDescription>
             </Alert>
           )}
-          
+
           {!isLoading && !error && bookings.length === 0 && (
             <Card>
               <CardHeader>
@@ -181,14 +182,14 @@ const Bookings = () => {
               </CardContent>
             </Card>
           )}
-          
+
           {!isLoading && !error && bookings.length > 0 && (
             <Tabs defaultValue="upcoming">
               <TabsList className="mb-6">
                 <TabsTrigger value="upcoming">Upcoming ({pendingBookings.length + confirmedBookings.length})</TabsTrigger>
                 <TabsTrigger value="past">Past ({cancelledBookings.length + completedBookings.length})</TabsTrigger>
               </TabsList>
-              
+
               <TabsContent value="upcoming">
                 <Card>
                   <CardHeader>
@@ -250,12 +251,12 @@ const Bookings = () => {
                                   <Link to={`/venues/${booking.venue_id}`}>
                                     <Button variant="outline" size="sm">View</Button>
                                   </Link>
-                                  
+
                                   {booking.status === 'pending' && (
                                     <AlertDialog>
                                       <AlertDialogTrigger asChild>
-                                        <Button 
-                                          variant="outline" 
+                                        <Button
+                                          variant="outline"
                                           size="sm"
                                           className="text-red-500 border-red-200 hover:bg-red-50"
                                           onClick={() => setBookingToCancel(booking.id)}
@@ -274,7 +275,7 @@ const Bookings = () => {
                                           <AlertDialogCancel onClick={() => setBookingToCancel(null)}>
                                             No, Keep It
                                           </AlertDialogCancel>
-                                          <AlertDialogAction 
+                                          <AlertDialogAction
                                             onClick={handleCancelBooking}
                                             disabled={isCancelling}
                                             className="bg-red-500 hover:bg-red-600"
@@ -298,7 +299,7 @@ const Bookings = () => {
                   </CardContent>
                 </Card>
               </TabsContent>
-              
+
               <TabsContent value="past">
                 <Card>
                   <CardHeader>
@@ -369,7 +370,7 @@ const Bookings = () => {
           )}
         </div>
       </main>
-      
+
       <Footer />
     </div>
   );

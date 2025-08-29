@@ -111,6 +111,8 @@ export interface Venue {
   status: string;
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 /**
  * Hook for fetching venues from Spring Boot REST API
  */
@@ -139,8 +141,8 @@ export const useVenuesQuery = (filters?: VenueFilters) => {
           params.search = filters.searchQuery;
         }
       }
-
-      const response = await axios.get('http://localhost:8080/sportyfi/venues', { params });
+// this api giving error work on it
+      const response = await axios.get(`${API_BASE_URL}/sportyfi/venues`, { params });
 
       return response.data || [];
     },
