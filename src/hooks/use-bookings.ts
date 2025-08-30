@@ -187,7 +187,7 @@ const createBooking = async (formData: any, user: any, totalPrice: number) => {
     };
     console.log((bookingPayload))
     const response = await axios.post(
-      "/sportyfi/venues/createBooking",
+      `${API_BASE_URL}/sportyfi/venues/createBooking`,
       bookingPayload
     );
 
