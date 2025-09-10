@@ -1,12 +1,12 @@
 
 import { useEffect, useCallback, useState } from 'react';
 import useFetchMatches from './match/use-fetch-matches';
-import useMatchesRealtime from './match/use-matches-realtime';
+// import useMatchesRealtime from './match/use-matches-realtime';
 import { toast } from './use-toast';
 
-export function useMatches(selectedSport: string | null) {
+export function useMatches(selectedSport: string | null, selectedCity: string | null, selectedMatchDate: string | null) {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
-  const { matches, isLoading, error, fetchMatches } = useFetchMatches(selectedSport);
+  const { matches, isLoading, error, fetchMatches } = useFetchMatches(selectedSport, selectedCity, selectedMatchDate);
 
   // Set up fetch on initial load and when sport changes
   useEffect(() => {
@@ -56,10 +56,10 @@ export function useMatches(selectedSport: string | null) {
   }, [fetchMatches]);
   
   // Set up realtime subscriptions
-  useMatchesRealtime({
-    onMatchesChange: handleMatchesChange,
-    onParticipantsChange: handleParticipantsChange
-  });
+  // useMatchesRealtime({
+  //   onMatchesChange: handleMatchesChange,
+  //   onParticipantsChange: handleParticipantsChange
+  // });
 
   return { 
     matches, 

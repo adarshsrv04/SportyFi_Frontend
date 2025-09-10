@@ -15,13 +15,13 @@ const Venues = () => {
   const [filterValues, setFilterValues] = useState({
     searchQuery: '',
     sport: 'All Sports',
-    location: 'All Locations',
+    city: 'All Cities',
     priceRange: [0, 5000] as [number, number],
   });
 
   const { data: venues, isLoading, error } = useVenues({
     sportFilter: filterValues.sport,
-    locationFilter: filterValues.location,
+    cityFilter: filterValues.city,
     priceRange: filterValues.priceRange,
     searchQuery: filterValues.searchQuery
   });

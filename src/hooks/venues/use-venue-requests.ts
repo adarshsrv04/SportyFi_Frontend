@@ -34,6 +34,7 @@ export interface VenueRequestFormData {
   name: string;
   description: string;
   location: string;
+  city: string;
   pricePerHour: number;
   contactPhone: string;
   contactEmail: string;
@@ -62,6 +63,7 @@ export const useSubmitVenueRequest = () => {
         name: formData.name,
         description: formData.description,
         location: formData.location,
+        city: formData.city,
         price_per_hour: formData.pricePerHour,
         contact_phone: formData.contactPhone,
         contact_email: formData.contactEmail,

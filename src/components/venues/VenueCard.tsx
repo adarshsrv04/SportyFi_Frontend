@@ -33,7 +33,7 @@ const VenueCard = ({ venue }: VenueCardProps) => {
         
         <div className="flex items-center text-sm text-muted-foreground mb-2">
           <MapPin className="h-4 w-4 mr-1 flex-shrink-0" />
-          <span className="line-clamp-1">{venue.location}</span>
+          <span className="line-clamp-1">{venue.location}, {venue.city}</span>
         </div>
         
         <div className="flex flex-wrap gap-1 mt-3">

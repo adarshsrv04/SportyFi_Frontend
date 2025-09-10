@@ -90,7 +90,7 @@ import axios from 'axios';
 // Interface for venue filter options
 export interface VenueFilters {
   sportFilter?: string;
-  locationFilter?: string;
+  cityFilter?: string;
   priceRange?: [number, number];
   searchQuery?: string;
 }
@@ -101,6 +101,7 @@ export interface Venue {
   name: string;
   description: string;
   location: string;
+  city: string;
   pricePerHour: number;
   isVerified: boolean;
   contactInfo: string;
@@ -128,8 +129,8 @@ export const useVenuesQuery = (filters?: VenueFilters) => {
           params.sport = filters.sportFilter;
         }
 
-        if (filters.locationFilter && filters.locationFilter !== 'All Locations') {
-          params.location = filters.locationFilter;
+        if (filters.cityFilter && filters.cityFilter !== 'All Cities') {
+          params.city = filters.cityFilter;
         }
 
         if (filters.priceRange) {

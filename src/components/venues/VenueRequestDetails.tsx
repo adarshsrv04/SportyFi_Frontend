@@ -12,6 +12,7 @@ interface VenueDetailsData {
     id: string;
     name: string;
     location: string;
+    city: string;
     description: string;
     price_per_hour: number;
     amenities: string[];
@@ -61,17 +62,17 @@ const VenueRequestDetails: React.FC = () => {
     const updateStatus = async (newStatus: 'approved' | 'rejected') => {
         if (!venue) return;
         setUpdating(true);
-        const { error } = await supabase
-            .from('venue_requests')
-            .update({ status: newStatus })
-            .eq('id', venue.id);
+        // const { error } = await supabase
+        //     .from('venue_requests')
+        //     .update({ status: newStatus })
+        //     .eq('id', venue.id);
 
-        if (!error) {
-            setVenue({ ...venue, status: newStatus });
-        } else {
-            console.error('Status update error:', error);
-        }
-        setUpdating(false);
+        // if (!error) {
+        //     setVenue({ ...venue, status: newStatus });
+        // } else {
+        //     console.error('Status update error:', error);
+        // }
+        // setUpdating(false);
     };
 
     type VenueRequestProps = {
@@ -83,6 +84,17 @@ const VenueRequestDetails: React.FC = () => {
             const response = await axios.post(`${API_BASE_URL}/sportyfi/venues/approve/${id}`);
             alert("Venue approved successfully!");
             console.log("Approved Venue:", response.data);
+        } catch (error) {
+            console.error("Error approving venue:", error);
+            alert("Failed to approve venue");
+        }
+    };
+
+    const rejectVenue = async () => {
+        try {
+            const response = await axios.post(`${API_BASE_URL}/sportyfi/venues/reject/${id}`);
+            alert("Venue Rejected successfully!");
+            console.log("Rejected Venue:", response.data);
         } catch (error) {
             console.error("Error approving venue:", error);
             alert("Failed to approve venue");
@@ -122,7 +134,7 @@ const VenueRequestDetails: React.FC = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-800">
                                 <div className="flex items-center">
                                     <MapPin className="w-5 h-5 mr-2 text-gray-500" />
-                                    <span>{venue.location}</span>
+                                    <span>{venue.location}, {venue.city}</span>
                                 </div>
                                 <div className="flex items-center">
                                     <Calendar className="w-5 h-5 mr-2 text-gray-500" />
@@ -174,12 +186,13 @@ const VenueRequestDetails: React.FC = () => {
                                     onClick={approveVenue}
                                     disabled={venue.status === 'approved' || updating}
                                 >
-                                    Approve11
+                                    Approve
                                 </Button>
                                 <Button
                                     variant="outline"
                                     className="border-red-500 text-red-600 hover:bg-red-50 w-full"
-                                    onClick={() => updateStatus('rejected')}
+                                    // onClick={() => updateStatus('rejected')}
+                                    onClick={rejectVenue}
                                     disabled={venue.status === 'rejected' || updating}
                                 >
                                     Decline

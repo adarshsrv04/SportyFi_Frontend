@@ -14,6 +14,7 @@ import { Plus, X, ChevronLeft, CheckCircle2 } from 'lucide-react';
 import { useSubmitVenueRequest } from '@/hooks/use-venues';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from '@/hooks/use-toast';
+import CityField from '@/components/match/CityField';
 
 // Available sports
 const availableSports = [
@@ -37,6 +38,7 @@ const RequestVenue = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
+  const [city, setCity] = useState('');
   const [pricePerHour, setPricePerHour] = useState('');
   const [contactPhone, setContactPhone] = useState('');
   const [contactEmail, setContactEmail] = useState('');
@@ -73,6 +75,7 @@ const RequestVenue = () => {
     const newErrors: Record<string, string> = {};
 
     if (!name.trim()) newErrors.name = 'Venue name is required';
+    if (!city.trim()) newErrors.location = 'City is required';
     if (!location.trim()) newErrors.location = 'Location is required';
     if (!pricePerHour.trim()) {
       newErrors.pricePerHour = 'Price per hour is required';
@@ -100,6 +103,7 @@ const RequestVenue = () => {
       name,
       description,
       location,
+      city,
       pricePerHour: parseFloat(pricePerHour),
       contactPhone,
       contactEmail,
@@ -156,6 +160,10 @@ const RequestVenue = () => {
   const removeAmenity = (amenity: string) => {
     setAmenities(prev => prev.filter(a => a !== amenity));
   };
+
+  const handleCityChange = (p0: string, value: string) => {
+    setCity(value);
+  }
 
   // Handle image selection
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -245,6 +253,11 @@ const RequestVenue = () => {
                       />
                       {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
                     </div>
+
+                    {/* <Label htmlFor="name">Venue City <span className="text-red-500">*</span></Label> */}
+                    <CityField
+                      onValueChange={(value) => handleCityChange('city', value)}
+                    />
 
                     <div className="space-y-2">
                       <Label htmlFor="location">Location <span className="text-red-500">*</span></Label>

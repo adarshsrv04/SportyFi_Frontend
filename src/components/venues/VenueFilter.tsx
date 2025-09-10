@@ -36,8 +36,8 @@ const sportOptions = [
   'Yoga'
 ];
 
-const locationOptions = [
-  'All Locations',
+const cityOptions = [
+  'All Cities',
   'Mumbai',
   'Delhi',
   'Bangalore',
@@ -52,7 +52,7 @@ const locationOptions = [
 export interface VenueFilterValues {
   searchQuery: string;
   sport: string;
-  location: string;
+  city: string;
   priceRange: [number, number];
 }
 
@@ -64,7 +64,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const VenueFilter = ({ onFilterChange }: VenueFilterProps) => {
   const { user } = useAuth();
-  const [location, setLocation] = useState('Mumbai');
+  const [city, setCity] = useState('Mumbai');
   useEffect(() => {
     const fetchUserDetails = async () => {
       // console.log(user)
@@ -77,7 +77,7 @@ const VenueFilter = ({ onFilterChange }: VenueFilterProps) => {
         const profileData = await response.json();
         if (profileData !== null && profileData.location !== null) {
           // console.log(profileData.location);
-          setLocation(profileData.location);
+          setCity(profileData.location);
         }
       }
     }
@@ -87,7 +87,7 @@ const VenueFilter = ({ onFilterChange }: VenueFilterProps) => {
   const [filters, setFilters] = useState<VenueFilterValues>({
     searchQuery: '',
     sport: 'All Sports',
-    location: 'All Locations',
+    city: 'All Cities',
     priceRange: [0, 5000],
   });
 
@@ -111,10 +111,10 @@ const VenueFilter = ({ onFilterChange }: VenueFilterProps) => {
     onFilterChange(newFilters);
   };
 
-  const handleLocationChange = (value: string) => {
+  const handleCityChange = (value: string) => {
     const newFilters = {
       ...filters,
-      location: value
+      city: value
     };
     setFilters(newFilters);
     onFilterChange(newFilters);
@@ -148,7 +148,7 @@ const VenueFilter = ({ onFilterChange }: VenueFilterProps) => {
     const defaultFilters: VenueFilterValues = {
       searchQuery: '',
       sport: 'All Sports',
-      location: 'All Locations',
+      city: 'All Cities',
       priceRange: [0, 5000],
     };
     setFilters(defaultFilters);
@@ -187,13 +187,13 @@ const VenueFilter = ({ onFilterChange }: VenueFilterProps) => {
           </div>
 
           <div className="col-span-2">
-            <Select value={filters.location} onValueChange={handleLocationChange}>
+            <Select value={filters.city} onValueChange={handleCityChange}>
               <SelectTrigger>
                 <SelectValue placeholder="Location" />
               </SelectTrigger>
               <SelectContent>
-                {locationOptions.map(location => (
-                  <SelectItem key={location} value={location}>{location}</SelectItem>
+                {cityOptions.map(city => (
+                  <SelectItem key={city} value={city}>{city}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -288,13 +288,13 @@ const VenueFilter = ({ onFilterChange }: VenueFilterProps) => {
 
                 <div className="space-y-2">
                   <Label>Location</Label>
-                  <Select value={filters.location} onValueChange={handleLocationChange}>
+                  <Select value={filters.city} onValueChange={handleCityChange}>
                     <SelectTrigger>
                       <SelectValue placeholder="Location" />
                     </SelectTrigger>
                     <SelectContent>
-                      {locationOptions.map(location => (
-                        <SelectItem key={location} value={location}>{location}</SelectItem>
+                      {cityOptions.map(city => (
+                        <SelectItem key={city} value={city}>{city}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>

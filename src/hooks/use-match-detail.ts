@@ -4,7 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import useFetchMatch from './match/use-fetch-match';
 import useMatchParticipants from './match/use-match-participants';
 import useMatchActions from './match/use-match-actions';
-import useMatchRealtime from './match/use-match-realtime';
+// import useMatchRealtime from './match/use-match-realtime';
 
 export type { ParticipantWithProfile } from './match/use-match-participants';
 export type { Host } from './match/use-fetch-match';
@@ -43,7 +43,7 @@ export const useMatchDetail = (matchId: string | undefined) => {
   }, [fetchParticipants]);
   
   // Set up realtime subscriptions
-  useMatchRealtime(matchId, handleMatchChange, handleParticipantsChange);
+  // useMatchRealtime(matchId, handleMatchChange, handleParticipantsChange);
 
   return {
     match,

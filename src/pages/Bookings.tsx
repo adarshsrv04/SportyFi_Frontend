@@ -39,20 +39,28 @@ import {
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { format } from 'date-fns';
 import { useAuth } from '@/context/AuthContext';
+import axios from 'axios';
 
 const Bookings = () => {
   const { user } = useAuth();
   // console.log(user)
   const { data: bookings = [], isLoading, error } = useBookings();
+  const flatBookings = bookings.map(b => ({
+    ...b.booking,
+  }));
   const { mutate: cancelBooking, isPending: isCancelling } = useCancelBooking();
 
   const [bookingToCancel, setBookingToCancel] = useState<string | null>(null);
 
   // Filter bookings by status
-  const pendingBookings = bookings.filter(booking => booking.status === 'pending');
-  const confirmedBookings = bookings.filter(booking => booking.status === 'confirmed');
-  const cancelledBookings = bookings.filter(booking => booking.status === 'cancelled');
-  const completedBookings = bookings.filter(booking => booking.status === 'completed');
+  const pendingBookings = flatBookings.filter(booking => booking.status === 'pending');
+  // const pendingBookings = bookings.filter(b => b.booking.status === 'pending');
+
+  console.log(pendingBookings);
+  const confirmedBookings = flatBookings.filter(booking => booking.status === 'confirmed');
+  const cancelledBookings = flatBookings.filter(booking => booking.status === 'cancelled');
+  const completedBookings = flatBookings.filter(booking => booking.status === 'completed');
+  const uniqueVenueIds = [...new Set(bookings.map(booking => booking.venue_id))];
 
   // Format date for display
   const formatDate = (dateStr: string) => {
@@ -62,7 +70,8 @@ const Bookings = () => {
       return dateStr;
     }
   };
-
+  console.log(bookings);
+  // console.log(uniqueVenueIds);
   // Format time for display (from "HH:MM:SS" to "HH:MM AM/PM")
   const formatTime = (timeStr: string) => {
     try {

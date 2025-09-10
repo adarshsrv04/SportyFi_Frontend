@@ -480,6 +480,7 @@ export type Database = {
           is_verified: boolean
           latitude: number | null
           location: string
+          city: string
           longitude: number | null
           name: string
           owner_id: string | null

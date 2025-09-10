@@ -28,9 +28,9 @@ const CreateMatchForm: React.FC = () => {
     <div className="sportyfi-container max-w-3xl">
       <h1 className="text-2xl md:text-3xl font-bold mb-6">Host a Match</h1>
 
-      <StatusAlerts 
-        isLoggedIn={!!user} 
-        createSuccess={createSuccess} 
+      <StatusAlerts
+        isLoggedIn={!!user}
+        createSuccess={createSuccess}
       />
 
       <form onSubmit={handleSubmit} className="space-y-6 sportyfi-card">
@@ -38,13 +38,13 @@ const CreateMatchForm: React.FC = () => {
           onValueChange={(value) => handleSelectChange('sport', value)}
         />
 
+        <CityField
+          onValueChange={(value) => handleSelectChange('city', value)}
+        />
+
         <LocationField
           value={formData.location}
           onChange={handleChange}
-        />
-
-        <CityField
-          onValueChange={(value) => handleSelectChange('city', value)}
         />
 
         <DateTimeFields
