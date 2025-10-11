@@ -1,5 +1,6 @@
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import QRCode from "react-qr-code";
+import { Button } from "../ui/button";
 
 const PaymentPage = () => {
   const location = useLocation();
@@ -39,7 +40,13 @@ const PaymentPage = () => {
           After payment, your booking will remain <b>PENDING</b> until the venue owner confirms it.
         </p>
       </div>
+      <Link to="/user-bookings">
+        <Button className="bg-sportyfi-orange hover:bg-red-600 text-white top-10px">
+          My Bookings
+        </Button>
+      </Link>
     </div>
+
   );
 };
 

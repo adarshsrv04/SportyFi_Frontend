@@ -69,6 +69,7 @@ import { useAuth } from '@/context/AuthContext';
 export const navigationLinks = [
   { title: 'Home', path: '/' },
   { title: 'Matches', path: '/matches' },
+  { title: 'Admin', path: '/admin' },
   { title: 'Watch Matches', path: '/watch', icon: <PlayCircle size={18} className="text-red-500" /> },
   { title: 'Grounds Booking', path: '/venues' },
   { title: 'About', path: '/about' },

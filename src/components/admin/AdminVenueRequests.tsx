@@ -24,6 +24,7 @@ interface VenueRequest {
   name: string;
   description: string | null;
   location: string;
+  city: string;
   price_per_hour: number;
   contact_phone: string;
   contact_email: string;
@@ -39,6 +40,8 @@ interface VenueRequest {
   };
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const AdminVenueRequests = () => {
   const { toast } = useToast();
   const [venueRequests, setVenueRequests] = useState<VenueRequest[]>([]);
@@ -49,18 +52,36 @@ const AdminVenueRequests = () => {
     try {
       setLoading(true);
       
-      const { data, error } = await supabase
-        .from('venue_requests')
-        .select(`
-          *,
-          owner:profiles(username)
-        `)
-        .eq('status', 'pending')
-        .order('created_at', { ascending: false });
+      // const { data, error } = await supabase
+      //   .from('venue_requests')
+      //   .select(`
+      //     *,
+      //     owner:profiles(username)
+      //   `)
+      //   .eq('status', 'pending')
+      //   .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      // if (error) throw error;
       
-      setVenueRequests(data as unknown as VenueRequest[]);
+      // setVenueRequests(data as unknown as VenueRequest[]);
+
+      const response = await fetch(`${API_BASE_URL}/sportyfi/venues/requested-venues`);
+        const data = await response.json()
+        console.log(data)
+
+        const formatted = (data as VenueRequest[]).map((item) => ({
+          id: item.id,
+          location: item.location || 'Unknown',
+          city: item.city || 'Unknown',
+          priceperhour: String(item.price_per_hour ?? '0'),
+          match_time: item.created_at || new Date().toISOString(),
+          team_size: 6, // optionally update if available
+          status: item.status || 'pending',
+          contactemail: item.contact_email || 'no-email@example.com',
+        }));
+
+        setVenueRequests(data as unknown as VenueRequest[]);
+        setLoading(false);
       
     } catch (error) {
       console.error('Error fetching venue requests:', error);

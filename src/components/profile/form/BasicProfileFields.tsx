@@ -8,6 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 interface BasicProfileFieldsProps {
   username: string;
   setUsername: (value: string) => void;
+  contactPhone: string;
+  setContactPhone: (value: string) => void;
   bio: string;
   setBio: (value: string) => void;
   location: string;
@@ -20,6 +22,8 @@ interface BasicProfileFieldsProps {
 
 const BasicProfileFields = ({
   username,
+  contactPhone,
+  setContactPhone,
   setUsername,
   bio,
   setBio,
@@ -39,6 +43,16 @@ const BasicProfileFields = ({
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Your username"
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="contactPhone">Contact Number</Label>
+        <Input
+          id="contactPhone"
+          value={contactPhone}
+          onChange={(e) => setContactPhone(e.target.value)}
+          placeholder="Your Contact Number"
         />
       </div>
       

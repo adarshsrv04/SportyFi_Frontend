@@ -10,6 +10,7 @@ import { supabase } from '@/integrations/supabase/client';
 // 🆕 Define the correct shape of data from `venue_requests`
 interface VenueRequest {
   id: string;
+  name:string;
   location: string;
   city: string,
   price_per_hour: number | string;
@@ -20,6 +21,7 @@ interface VenueRequest {
 
 interface GroundVerification {
   id: string;
+  name: string;
   location: string;
   city: string,
   priceperhour: string;
@@ -56,6 +58,7 @@ const VenueVerificationCard: React.FC = () => {
 
         const formatted: GroundVerification[] = (data as VenueRequest[]).map((item) => ({
           id: item.id,
+          name: item.name,
           location: item.location || 'Unknown',
           city: item.city || 'Unknown',
           priceperhour: String(item.price_per_hour ?? '0'),
@@ -98,7 +101,7 @@ const VenueVerificationCard: React.FC = () => {
                 <div key={venue.id} className="w-full sm:w-96">
                   <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
                     <div className="flex justify-between items-start mb-3">
-                      <h3 className="text-lg font-semibold">Ground Verification Request</h3>
+                      <h3 className="text-lg font-semibold">{venue.name}</h3>
                       <Badge className={`${statusColors[venue.status] || 'bg-gray-100 text-gray-800'} text-xs font-medium px-2.5 py-0.5 rounded`}>
                         {venue.status.charAt(0).toUpperCase() + venue.status.slice(1)}
                       </Badge>

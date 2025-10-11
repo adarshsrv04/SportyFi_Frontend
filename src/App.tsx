@@ -34,6 +34,7 @@ import VenueDetails from "./components/venues/VenueRequestDetails";
 import VenueRequestDetails from "./components/venues/VenueRequestDetails";
 import VenueVerificationCard from "./components/venues/VenueVerificationCard";
 import VenueBookingPayment from "./components/venues/VenueBookingPayment";
+import VenueOwnerDashboard from "./components/venues/VenueOwnerDashboard";
 
 const queryClient = new QueryClient();
 
@@ -62,15 +63,16 @@ const App = () => (
               <Route path="/venues" element={<Venues />} />
               <Route path="/venues/:id" element={<VenueDetail />} />
               <Route path="/venues/request" element={<RequestVenue />} />
-              <Route path="/bookings" element={<Bookings />} />
+              <Route path="/user-bookings" element={<Bookings />} />
               <Route path="/dashboard" element={<UserDashboard />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/admin/add-venue" element={<AdminAddVenue />} />
               <Route path="/admin/edit-venue/:id" element={<AdminEditVenue />} />
               <Route path="/watch" element={<WatchMatches />} />
-              <Route path="/verifyVenue" element={<VenueVerificationCard />} />
-              <Route path="/verifyVenue/:id" element={<VenueRequestDetails />} />
+              <Route path="/verifyVenue" element={<VenueVerificationCard />} /> {/*for admin */}
+              <Route path="/verifyVenue/:id" element={<VenueRequestDetails />} /> {/*for admin */}
               <Route path="/venuepayment" element={<VenueBookingPayment/>} />
+              <Route path="/requestedvenues" element={<VenueOwnerDashboard/>} /> {/*for ground owners */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </AuthProvider>

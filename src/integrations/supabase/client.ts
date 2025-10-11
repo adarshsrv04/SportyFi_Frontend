@@ -39,7 +39,7 @@ export type VenueRequest = Tables['venue_requests']['Row'];
 // Complete venue type with relations
 export type VenueWithRelations = Venue & {
   // sports?: VenueSport[];
-  // amenities?: VenueAmenity[];
+  amenities?: [];
   images?: VenueImage[];
 };
 

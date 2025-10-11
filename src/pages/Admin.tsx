@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/context/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
+// import { supabase } from '@/integrations/supabase/client';
 import SportyFiHeader from '@/components/SportyFiHeader';
 import Footer from '@/components/Footer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -14,30 +13,43 @@ import AdminVenueRequests from '@/components/admin/AdminVenueRequests';
 import AdminVenuesList from '@/components/admin/AdminVenuesList';
 import AdminBookingRequests from '@/components/admin/AdminBookingRequests';
 import { ShieldCheck, Lock } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Admin = () => {
-  const { user } = useAuth();
+  // const { user } = useAuth();
+  const { user, isLoading } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
-  
+
   useEffect(() => {
     const checkAdminStatus = async () => {
+      // console.log(user)
+      if(isLoading) return;
+
       if (!user) {
         navigate('/auth');
         return;
       }
-      
+
       try {
         // Check if the user is an admin by querying the profiles table for role field
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', user.id)
-          .single();
-        
-        if (error) throw error;
-        
+        // const { data, error } = await supabase
+        //   .from('profiles')
+        //   .select('role')
+        //   .eq('id', user.id)
+        //   .single();
+
+        // if (error) throw error;
+
+        const response = await fetch(`${API_BASE_URL}/sportyfi/profiles/${user.id}`);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch profile: ${response.statusText}`);
+        }
+        const data = await response.json();
+        console.log(data)
         if (data && data.role === 'admin') {
           setIsAdmin(true);
         } else {
@@ -46,7 +58,7 @@ const Admin = () => {
             description: "You don't have permission to access this page.",
             variant: "destructive",
           });
-          navigate('/');
+          // navigate('/');
         }
       } catch (error) {
         console.error('Error checking admin status:', error);
@@ -55,13 +67,13 @@ const Admin = () => {
           description: "Please try again later.",
           variant: "destructive",
         });
-        navigate('/');
+        // navigate('/');
       }
     };
-    
+
     checkAdminStatus();
   }, [user, navigate, toast]);
-  
+
   if (!isAdmin) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -88,11 +100,11 @@ const Admin = () => {
       </div>
     );
   }
-  
+
   return (
     <div className="min-h-screen flex flex-col">
       <SportyFiHeader />
-      
+
       <main className="flex-grow py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-6">
@@ -104,14 +116,14 @@ const Admin = () => {
               {user?.email}
             </Badge>
           </div>
-          
+
           <Tabs defaultValue="venue-requests" className="mt-6">
             <TabsList className="grid grid-cols-3 mb-8">
               <TabsTrigger value="venue-requests">Venue Requests</TabsTrigger>
               <TabsTrigger value="venues">Manage Venues</TabsTrigger>
               <TabsTrigger value="bookings">Booking Requests</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="venue-requests">
               <Card>
                 <CardHeader>
@@ -125,7 +137,7 @@ const Admin = () => {
                 </CardContent>
               </Card>
             </TabsContent>
-            
+
             <TabsContent value="venues">
               <Card>
                 <CardHeader>
@@ -141,11 +153,11 @@ const Admin = () => {
                     </Link>
                   </div>
                   <Separator className="my-4" />
-                  <AdminVenuesList />
+                  {/* <AdminVenuesList /> */}
                 </CardContent>
               </Card>
             </TabsContent>
-            
+
             <TabsContent value="bookings">
               <Card>
                 <CardHeader>
@@ -155,14 +167,14 @@ const Admin = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <AdminBookingRequests />
+                  {/* <AdminBookingRequests /> */}
                 </CardContent>
               </Card>
             </TabsContent>
           </Tabs>
         </div>
       </main>
-      
+
       <Footer />
     </div>
   );

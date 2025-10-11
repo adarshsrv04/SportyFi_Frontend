@@ -1,6 +1,7 @@
 
 interface ProfileData {
   username?: string | null;
+  contact_phone?: string | null;
   avatar_url?: string | null;
   location?: string | null;
   primary_sport?: string | null;
@@ -17,6 +18,7 @@ export function calculateProfileCompleteness(profile: ProfileData) {
   const fields = [
     { name: 'Profile Picture', value: profile.avatar_url },
     { name: 'Username', value: profile.username },
+    { name: 'Contact Phone', value: profile.contact_phone },
     { name: 'Location', value: profile.location },
     { name: 'Primary Sport', value: profile.primary_sport },
     { name: 'Bio', value: profile.bio },

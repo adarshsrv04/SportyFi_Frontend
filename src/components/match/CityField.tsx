@@ -21,7 +21,7 @@ const CityField: React.FC<CityFieldProps> = ({ onValueChange }) => {
         <SelectContent>
           <SelectItem value="Mumbai">Mumbai</SelectItem>
           <SelectItem value="Chennai">Chennai</SelectItem>
-          <SelectItem value="Hydrabad">Hydrabad</SelectItem>
+          <SelectItem value="Hyderabad">Hyderabad</SelectItem>
           <SelectItem value="Kolkata">Kolkata</SelectItem>
           <SelectItem value="Bangalore">Bangalore</SelectItem>
         </SelectContent>

@@ -13,6 +13,7 @@ interface ProfileEditFormProps {
   user: {
     id: string;
     username?: string | null;
+    contact_phone?: string | null;
     avatar_url?: string | null;
     location?: string | null;
     bio?: string | null;
@@ -23,7 +24,7 @@ interface ProfileEditFormProps {
 }
 
 const AVAILABLE_LOCATIONS = [
-  'Mumbai', 'Chennai', 'Bangalore', 'Hyderabad', 'Delhi',
+  'Mumbai', 'Chennai', 'Bangalore', 'Hyderabad', 'Delhi', 'Kolkata',
 ];
 
 const AVAILABLE_SPORTS = [
@@ -46,6 +47,7 @@ const ProfileEditForm = ({ user, onSave }: ProfileEditFormProps) => {
   }, [user, onSave]);
 
   const [username, setUsername] = useState(user.username || '');
+  const [contactPhone, setContactPhone] = useState(user.contact_phone || '');
   const [bio, setBio] = useState(user.bio || '');
   const [location, setLocation] = useState(user.location || '');
   const [primarySport, setPrimarySport] = useState(user.primary_sport || '');
@@ -60,6 +62,7 @@ const ProfileEditForm = ({ user, onSave }: ProfileEditFormProps) => {
   // Calculate current profile completeness based on form state
   const currentCompleteness = calculateProfileCompleteness({
     username,
+    contact_phone: contactPhone,
     bio,
     location,
     primary_sport: primarySport,
@@ -100,6 +103,7 @@ const ProfileEditForm = ({ user, onSave }: ProfileEditFormProps) => {
         },
         body: JSON.stringify({
           username,
+          contact_phone: contactPhone,
           bio,
           location,
           primary_sport: primarySport,
@@ -172,6 +176,8 @@ const ProfileEditForm = ({ user, onSave }: ProfileEditFormProps) => {
       <BasicProfileFields 
         username={username}
         setUsername={setUsername}
+        contactPhone={contactPhone}
+        setContactPhone={setContactPhone}
         bio={bio}
         setBio={setBio}
         location={location}
@@ -180,7 +186,7 @@ const ProfileEditForm = ({ user, onSave }: ProfileEditFormProps) => {
         primarySport={primarySport}
         setPrimarySport={setPrimarySport}
         availableSports={AVAILABLE_SPORTS}
-      />
+        />
       
       {/* Preferred sports selector */}
       <PreferredSportsSelector 

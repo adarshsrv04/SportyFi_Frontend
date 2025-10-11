@@ -47,15 +47,15 @@ const VenueCard = ({ venue }: VenueCardProps) => {
           )}
         </div>
       </CardContent>
-      
-      <CardFooter className="p-4 pt-0 flex justify-between">
-        <Link 
+      <Link 
           to={`/venues/${venue.id}`}
           className="text-sportyfi-orange hover:text-red-600 font-medium text-sm"
         >
+      <CardFooter className="p-4 pt-0 flex justify-between">
+        
           View Details
-        </Link>
-      </CardFooter>
+        
+      </CardFooter></Link>
     </Card>
   );
 };

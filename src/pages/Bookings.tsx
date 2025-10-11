@@ -56,12 +56,13 @@ const Bookings = () => {
   const pendingBookings = flatBookings.filter(booking => booking.status === 'pending');
   // const pendingBookings = bookings.filter(b => b.booking.status === 'pending');
 
-  console.log(pendingBookings);
-  const confirmedBookings = flatBookings.filter(booking => booking.status === 'confirmed');
+  
+  const confirmedBookings = flatBookings.filter(booking => booking.status === 'approved');
   const cancelledBookings = flatBookings.filter(booking => booking.status === 'cancelled');
+  const rejectedBookings = flatBookings.filter(booking => booking.status === 'rejected');
   const completedBookings = flatBookings.filter(booking => booking.status === 'completed');
   const uniqueVenueIds = [...new Set(bookings.map(booking => booking.venue_id))];
-
+  console.log(rejectedBookings);
   // Format date for display
   const formatDate = (dateStr: string) => {
     try {
@@ -90,10 +91,12 @@ const Bookings = () => {
     switch (status) {
       case 'pending':
         return <Badge variant="outline" className="bg-yellow-100 text-yellow-800 border-yellow-300">Pending</Badge>;
-      case 'confirmed':
-        return <Badge variant="outline" className="bg-green-100 text-green-800 border-green-300">Confirmed</Badge>;
+      case 'approved':
+        return <Badge variant="outline" className="bg-green-100 text-green-800 border-green-300">Approved</Badge>;
       case 'cancelled':
         return <Badge variant="outline" className="bg-red-100 text-red-800 border-red-300">Cancelled</Badge>;
+      case 'rejected':
+        return <Badge variant="outline" className="bg-red-100 text-red-800 border-red-300">Rejected</Badge>;
       case 'completed':
         return <Badge variant="outline" className="bg-blue-100 text-blue-800 border-blue-300">Completed</Badge>;
       default:
@@ -206,7 +209,7 @@ const Bookings = () => {
                     <CardDescription>Your pending and confirmed bookings</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    {pendingBookings.length === 0 && confirmedBookings.length === 0 ? (
+                    {pendingBookings.length === 0 && confirmedBookings.length === 0 && rejectedBookings.length === 0 ? (
                       <div className="text-center py-8">
                         <p className="text-muted-foreground mb-4">You don't have any upcoming bookings.</p>
                         <Link to="/venues">
@@ -225,7 +228,7 @@ const Bookings = () => {
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          {[...pendingBookings, ...confirmedBookings].map((booking) => (
+                          {[...pendingBookings, ...confirmedBookings, ...rejectedBookings].map((booking) => (
                             <TableRow key={booking.id}>
                               <TableCell>
                                 <div>
